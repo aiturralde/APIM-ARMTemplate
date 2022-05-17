@@ -7,6 +7,15 @@
       },
       "appInsName":{
         "value": "appins-dev-eastus-aiir01"
+      },
+      "artifactsBaseUrl":{
+        "value": "file:///C:\\users\\admin\\source\\repos\\apim-armtemplate\\"
+      },
+      "subscriptionId":{
+        "value": ""
+      },
+      "resourceGroupName":{
+        "value": ""
       }
     }
   }

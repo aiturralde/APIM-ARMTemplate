@@ -11,7 +11,7 @@ This was a sample delivered to a customer so that he could deploy an API Managem
 First you will need a resource group, something like this:
 *
 ```powershell
-az group create --name ProduBanco --location eastus
+az group create --name exampleRG --location eastus
 ```
 
 After this you can deploy de Bicep template based on the parameters file
