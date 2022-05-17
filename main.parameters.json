@@ -4,6 +4,9 @@
     "parameters": {
       "apimName": {
         "value": "api-mgnt-dev-eastus-aiir01"
+      },
+      "appInsName":{
+        "value": "appins-dev-eastus-aiir01"
       }
     }
   }
