@@ -1,5 +1,9 @@
 param apimName string
+param appInsName string
 param location string = resourceGroup().location
+param artifactsBaseUrl string
+param subscriptionId string
+param resourceGroupName string
 
 @description('Pricing tier of this API Management service')
 @allowed([
@@ -16,7 +20,6 @@ param sku string = 'Developer'
 ])
 param skuCount int = 1
 
-
 // Create a workspace
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: 'myworkspace'
@@ -25,7 +28,7 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
 
 // Create an App Insights resources connected to the workspace
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: 'apiminsights'
+  name: appInsName
   location: location
   kind: 'web'
   properties:{
@@ -43,20 +46,20 @@ resource apim 'Microsoft.ApiManagement/service@2020-12-01' = {
   }
   properties:{
     virtualNetworkType: 'None'
-    publisherEmail: 'publisherEmail@contoso.com'
-    publisherName: 'publisherName'    
+    publisherEmail: 'andres@iturralde.com'
+    publisherName: 'ANDRESI'    
   }  
   tags:{
     ApplicationName: 'Nombre de la aplicación, modulo o canal que está afectando'
-    Approver: 'Persona que aprobó la creación del recurso en Azure'
-    Creator: 'Persona que creó el recurso en Azure'
-    BusinessUnit: 'Unidad de negocio que administra o usa el recurso'
-    BudgetAmount: 'Presupuesto asignado para el recurso'
-    Env: 'Ambiente en el que se encuentra creado el recurso'
-    Owner: 'Login del Administrador de Producción que monitorea el recurso'
-    StartDate: 'Fecha de inicio de operación del recurso'
-    EndDate: 'Fecha de finalización en la que el recurso va a ser destruido'
-    Excepciones: 'Para poner porque se excepciono'
+    Approver: 'Andres Iturralde'
+    Creator: 'Andres Iturralde'
+    BusinessUnit: 'CE'
+    BudgetAmount: '1000'
+    Env: 'Dev'
+    Owner: 'Andres Iturralde'
+    StartDate: '16052022'
+    EndDate: 'N/A'
+    Excepciones: 'N/A'
   }
 }
 
@@ -81,5 +84,14 @@ resource apimLogger 'Microsoft.ApiManagement/service/loggers@2021-04-01-preview'
     credentials:{
       instrumentationKey: '{{instrumentationKey}}'
     }
+  }
+}
+
+//Adding APIM policies
+resource apimPolicy 'Microsoft.ApiManagement/service/policies@2019-12-01' = {
+  name: '${apim.name}/policy'
+  properties:{
+    value: '${artifactsBaseUrl}policies.xml'
+    format: 'xml-link'
   }
 }
