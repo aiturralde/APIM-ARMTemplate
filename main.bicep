@@ -1,6 +1,9 @@
 param apimName string
 param appInsName string
 param location string = resourceGroup().location
+param artifactsBaseUrl string
+param subscriptionId string
+param resourceGroupName string
 
 @description('Pricing tier of this API Management service')
 @allowed([
@@ -16,7 +19,6 @@ param sku string = 'Developer'
   2
 ])
 param skuCount int = 1
-
 
 // Create a workspace
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
@@ -82,5 +84,14 @@ resource apimLogger 'Microsoft.ApiManagement/service/loggers@2021-04-01-preview'
     credentials:{
       instrumentationKey: '{{instrumentationKey}}'
     }
+  }
+}
+
+//Adding APIM policies
+resource apimPolicy 'Microsoft.ApiManagement/service/policies@2019-12-01' = {
+  name: '${apim.name}/policy'
+  properties:{
+    value: '${artifactsBaseUrl}policies.xml'
+    format: 'xml-link'
   }
 }
