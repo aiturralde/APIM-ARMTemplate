@@ -1,19 +1,15 @@
 <policies>
   <inbound>
-    <base />
-    <set-backend-service base-url="https://management.azure.com/subscriptions/{{subscriptionId}}/resourceGroups/{{resourceGroupName}}/providers/Microsoft.ApiManagement/service/{{apimName}}" />
+    <!-- <set-backend-service base-url="https://management.azure.com/subscriptions/{{subscriptionId}}/resourceGroups/{{resourceGroupName}}/providers/Microsoft.ApiManagement/service/{{apimName}}" /> -->
   </inbound>
   <backend>
-    <base />
   </backend>
   <outbound>
-    <base />
     <set-header name="X-AspNet-Version" exists-action="delete" />
     <set-header name="X-Powered-By" exists-action="delete" />
     <set-header name="X-Content-Type-Options" exists-action="delete" />
     <redirect-content-urls />
   </outbound>
   <on-error>
-    <base />
   </on-error>
 </policies>

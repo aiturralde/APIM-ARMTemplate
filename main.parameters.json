@@ -3,19 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "apimName": {
-        "value": "api-mgnt-dev-eastus-aiir01"
+        "value": "api-mgnt-dev-eastus-aiir-03"
       },
       "appInsName":{
-        "value": "appins-dev-eastus-aiir01"
+        "value": "appins-dev-eastus-aiir-03"
       },
-      "artifactsBaseUrl":{
-        "value": "file:///C:\\users\\admin\\source\\repos\\apim-armtemplate\\"
-      },
-      "subscriptionId":{
-        "value": ""
-      },
-      "resourceGroupName":{
-        "value": ""
+      "workspaceName":{
+        "value": "wk-dev-eastus-aiir-03"
       }
     }
   }
