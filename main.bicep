@@ -2,6 +2,17 @@ param apimName string
 param appInsName string
 param location string = resourceGroup().location
 param workspaceName string
+param publicIpName string
+param subnetName string
+
+resource subnetRef 'Microsoft.Network/virtualNetworks/subnets@2021-08-01' existing{
+  name: subnetName
+}
+
+resource pubIP  'Microsoft.Network/publicIPAddresses@2021-08-01' existing = {
+  name: publicIpName
+}
+
 
 @description('Pricing tier of this API Management service')
 @allowed([
@@ -40,7 +51,14 @@ resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
     name: sku
   }
   properties:{
-    virtualNetworkType: 'None'
+    
+    virtualNetworkType: 'Internal'
+    
+    publicIpAddressId: pubIP.id
+    virtualNetworkConfiguration: {
+      subnetResourceId: subnetRef.id
+    }
+
     publisherEmail: 'andres@iturralde.com'
     publisherName: 'ANDRESI'    
   }  
