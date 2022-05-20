@@ -18,26 +18,21 @@ param sku string = 'Developer'
 ])
 param skuCount int = 1
 
-// Create a workspace
-resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
-  name: workspaceName
-  location: location
+var tagValues = {
+    ApplicationName: 'Nombre de la aplicación, modulo o canal que está afectando'
+    Approver: 'Andres Iturralde'
+    Creator: 'Andres Iturralde'
+    BusinessUnit: 'CE'
+    BudgetAmount: '1000'
+    Env: 'Dev'
+    Owner: 'Andres Iturralde'
+    StartDate: '16052022'
+    EndDate: 'N/A'
+    Excepciones: 'N/A'
 }
 
-// Create an App Insights resources connected to the workspace
-resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: appInsName
-  location: location
-  kind: 'web'
-  properties:{
-    Application_Type:'web'
-    WorkspaceResourceId: workspace.id
-  }
-}
-
-output instrumentationKey string = appInsights.properties.InstrumentationKey
-
-resource apim 'Microsoft.ApiManagement/service@2020-12-01' = {
+//Creating APIM
+resource apim 'Microsoft.ApiManagement/service@2021-12-01-preview' = {
   name: apimName
   location: location
   sku:{
@@ -49,21 +44,29 @@ resource apim 'Microsoft.ApiManagement/service@2020-12-01' = {
     publisherEmail: 'andres@iturralde.com'
     publisherName: 'ANDRESI'    
   }  
-  tags:{
-    ApplicationName: 'Nombre de la aplicación, modulo o canal que está afectando'
-    Approver: 'Andres Iturralde'
-    Creator: 'Andres Iturralde'
-    BusinessUnit: 'CE'
-    BudgetAmount: '1000'
-    Env: 'Dev'
-    Owner: 'Andres Iturralde'
-    StartDate: '16052022'
-    EndDate: 'N/A'
-    Excepciones: 'N/A'
+  tags: tagValues
+}
+
+// Create a workspace
+resource workspace 'Microsoft.OperationalInsights/workspaces@2021-12-01-preview' = {
+  name: workspaceName
+  location: location
+  tags: tagValues
+}
+
+// Create an App Insights resources connected to the workspace
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: appInsName
+  location: location
+  kind: 'web'
+  tags: tagValues
+  properties:{
+    Application_Type:'web'
+    WorkspaceResourceId: workspace.id
   }
 }
 
-resource namedValueAppInsightsKey 'Microsoft.ApiManagement/service/namedValues@2020-06-01-preview' = {
+resource namedValueAppInsightsKey 'Microsoft.ApiManagement/service/namedValues@2021-12-01-preview' = {
   parent: apim
   name: 'instrumentationKey'
   properties: {
@@ -74,7 +77,7 @@ resource namedValueAppInsightsKey 'Microsoft.ApiManagement/service/namedValues@2
   }
 }
 
-resource apimLogger 'Microsoft.ApiManagement/service/loggers@2021-04-01-preview' = {
+resource apimLogger 'Microsoft.ApiManagement/service/loggers@2021-12-01-preview' = {
   parent: apim
   name: 'apimlogger'
   properties:{
@@ -82,15 +85,13 @@ resource apimLogger 'Microsoft.ApiManagement/service/loggers@2021-04-01-preview'
     description: 'Application Insights for APIM'
     loggerType: 'applicationInsights'
     credentials:{
-      instrumentationKey: '{{instrumentationKey}}'
+      instrumentationKey: appInsights.properties.InstrumentationKey
     }
   }
 }
 
 //Adding APIM policies
-//name: '${apim.name}/policy'
-//Pendiente de definir un Producto.
-resource apimPolicy 'Microsoft.ApiManagement/service/policies@2019-12-01' = {
+resource apimPolicy 'Microsoft.ApiManagement/service/policies@2021-12-01-preview' = {
   parent: apim
   name: 'policy'
   properties:{
