@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "apimName": {
-        "value": "api-mgnt-dev-eastus-aiir-03"
+        "value": "api-mgnt-dev-eastus-aiir-15"
       },
       "appInsName":{
-        "value": "appins-dev-eastus-aiir-03"
+        "value": "appins-dev-eastus-aiir-15"
       },
       "workspaceName":{
-        "value": "wk-dev-eastus-aiir-03"
+        "value": "wk-dev-eastus-aiir-15"
       }
     }
   }
